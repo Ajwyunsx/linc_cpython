@@ -3,8 +3,9 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 OUT_FILE="${1:-$ROOT_DIR/.haxelib.zip}"
+PYTHON_BIN="${PYTHON_BIN:-python}"
 
-python3 - <<'PY' "$ROOT_DIR" "$OUT_FILE"
+"$PYTHON_BIN" - <<'PY' "$ROOT_DIR" "$OUT_FILE"
 import fnmatch
 import os
 import pathlib
