@@ -71,14 +71,24 @@ export RANLIB="${TOOLCHAIN}/llvm-ranlib"
 export READELF="${TOOLCHAIN}/llvm-readelf"
 export STRIP="${TOOLCHAIN}/llvm-strip"
 
+CONFIG_SITE_FILE="${BUILD_ROOT}/config.site"
+cat > "$CONFIG_SITE_FILE" <<EOF
+ac_cv_file__dev_ptmx=yes
+ac_cv_file__dev_ptc=no
+ac_cv_func_getaddrinfo=yes
+ac_cv_buggy_getaddrinfo=no
+EOF
+
+export CONFIG_SITE="$CONFIG_SITE_FILE"
+
 ./configure \
   --host="$HOST" \
   --build="$(./config.guess)" \
   --disable-shared \
+  --disable-test-modules \
+  --with-pkg-config=no \
   --without-ensurepip \
-  --with-build-python="$(command -v python3)" \
-  ac_cv_file__dev_ptmx=yes \
-  ac_cv_file__dev_ptc=no
+  --with-build-python="$(command -v python3)"
 
 make -j"$(getconf _NPROCESSORS_ONLN)" libpython${PYTHON_VERSION_DOT}.a Parser/pgen Programs/_freeze_module
 
