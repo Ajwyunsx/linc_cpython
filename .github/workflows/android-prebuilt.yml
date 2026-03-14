@@ -6,7 +6,9 @@ on:
     paths:
       - '.github/workflows/android-prebuilt.yml'
       - 'scripts/build-android-python.sh'
+      - 'scripts/package-haxelib.sh'
       - 'linc/linc_cpython.xml'
+      - 'lib/cpython/**'
 
 permissions:
   contents: write
@@ -15,6 +17,7 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         abi: [ armv7, arm64-v8a, x86, x86_64 ]
     steps:
@@ -40,6 +43,21 @@ jobs:
           path: |
             lib/cpython/include/android/${{ matrix.abi }}/
             lib/cpython/lib/android/${{ matrix.abi }}/
+
+  package-haxelib:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package haxelib archive
+        run: |
+          bash scripts/package-haxelib.sh .haxelib.zip
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linc_cpython-haxelib
+          path: .haxelib.zip
 
   sync-android-prebuilts:
     runs-on: ubuntu-latest
@@ -77,4 +95,31 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: update Android CPython prebuilts"
             git push
+          else
+            echo "No Android prebuilt changes to commit."
           fi
+
+  publish-bundle:
+    runs-on: ubuntu-latest
+    needs: [ build-android, package-haxelib ]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Archive Android artifacts
+        shell: bash
+        run: |
+          tar -czf linc_cpython-android-prebuilts.tar.gz -C dist .
+
+      - name: Publish bundle release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          replacesArtifacts: true
+          artifactErrorsFailBuild: true
+          artifacts: dist/linc_cpython-haxelib/.haxelib.zip,linc_cpython-android-prebuilts.tar.gz
+          tag: android-prebuilt-latest
+          name: android-prebuilt-latest
+          prerelease: true

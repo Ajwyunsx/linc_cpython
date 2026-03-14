@@ -47,7 +47,7 @@ This library works with the Haxe cpp target only.
 ## Install
 
 ```bash
-haxelib git linc_cpython https://github.com/yourusername/linc_cpython.git
+haxelib git linc_cpython https://github.com/Ajwyunsx/linc_cpython.git
 ```
 
 ## Requirements
@@ -63,6 +63,8 @@ haxelib git linc_cpython https://github.com/yourusername/linc_cpython.git
 Install Python and ensure the following paths are correct:
 - Headers: `C:/Python3X/include`
 - Libraries: `C:/Python3X/libs`
+
+`linc_cpython` also works with GitHub Actions `actions/setup-python`; the desktop CI workflow resolves these paths automatically from `sysconfig` and injects them as Haxe defines.
 
 You can override these paths using defines:
 ```bash
@@ -483,8 +485,8 @@ Create an `.hxml` file for your project:
 
 ## Automation
 
-- `.github/workflows/ci.yml` runs the Windows hxcpp test suite and builds a `.haxelib.zip` artifact
-- `.github/workflows/android-prebuilt.yml` builds Android static CPython libraries and can sync them back into `lib/cpython/`
+- `.github/workflows/ci.yml` runs desktop tests on Windows, Linux, and macOS, then packages a `.haxelib.zip` artifact and can publish a rolling/tagged release asset
+- `.github/workflows/android-prebuilt.yml` builds Android static CPython libraries, syncs them back into `lib/cpython/`, and can publish an Android prebuilt bundle release
 - `scripts/package-haxelib.sh` creates a package archive using `.haxelibignore`
 - `scripts/build-android-python.sh` cross-builds `libpython3.12.a` for Android ABIs using the NDK
 
@@ -532,5 +534,5 @@ Contributions are welcome! Please follow the linc guidelines:
 ## Support
 
 For issues, questions, or contributions:
-- GitHub Issues: https://github.com/yourusername/linc_cpython/issues
+- GitHub Issues: https://github.com/Ajwyunsx/linc_cpython/issues
 - Haxe Community: https://community.haxe.org/

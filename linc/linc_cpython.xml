@@ -10,6 +10,7 @@
         <compilerflag value="-I${PYTHON_INCLUDE_PATH}" if="PYTHON_INCLUDE_PATH" />
 
         <section if="windows">
+            <compilerflag value="-I${PYTHON_HOME}/include" unless="PYTHON_INCLUDE_PATH" />
             <compilerflag value="-I${PYTHON_HOME}/Include" unless="PYTHON_INCLUDE_PATH" />
         </section>
 

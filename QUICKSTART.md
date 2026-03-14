@@ -38,7 +38,7 @@ linc_cpython/
 
 ```bash
 # 克隆到本地
-haxelib git linc_cpython https://github.com/yourusername/linc_cpython.git
+haxelib git linc_cpython https://github.com/Ajwyunsx/linc_cpython.git
 
 # 或者本地开发
 haxelib dev linc_cpython /path/to/linc_cpython
