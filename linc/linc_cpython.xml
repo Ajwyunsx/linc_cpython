@@ -1,0 +1,79 @@
+<xml>
+
+    <set name="PYTHON_VERSION" value="312" unless="PYTHON_VERSION" />
+    <set name="PYTHON_VERSION_DOT" value="3.12" unless="PYTHON_VERSION_DOT" />
+    <set name="PYTHON_HOME" value="${LOCALAPPDATA}/Programs/Python/Python${PYTHON_VERSION}" if="windows" unless="PYTHON_HOME" />
+    <set name="PYTHON_ANDROID_ROOT" value="${LINC_CPYTHON_PATH}lib/cpython" if="android" unless="PYTHON_ANDROID_ROOT" />
+
+    <files id="haxe">
+        <compilerflag value="-I${LINC_CPYTHON_PATH}/linc/" />
+        <compilerflag value="-I${PYTHON_INCLUDE_PATH}" if="PYTHON_INCLUDE_PATH" />
+
+        <section if="windows">
+            <compilerflag value="-I${PYTHON_HOME}/Include" unless="PYTHON_INCLUDE_PATH" />
+        </section>
+
+        <section if="linux">
+            <compilerflag value="-I/usr/include/python${PYTHON_VERSION_DOT}" unless="PYTHON_INCLUDE_PATH" />
+            <compilerflag value="-I/usr/local/include/python${PYTHON_VERSION_DOT}" unless="PYTHON_INCLUDE_PATH" />
+        </section>
+
+        <section if="mac">
+            <compilerflag value="-I/usr/local/include/python${PYTHON_VERSION_DOT}" unless="PYTHON_INCLUDE_PATH" />
+            <compilerflag value="-I/opt/homebrew/include/python${PYTHON_VERSION_DOT}" unless="PYTHON_INCLUDE_PATH" />
+        </section>
+
+        <section if="android">
+            <compilerflag value="-I${PYTHON_ANDROID_ROOT}/include/android/armv7" if="HXCPP_ARMV7" unless="PYTHON_INCLUDE_PATH" />
+            <compilerflag value="-I${PYTHON_ANDROID_ROOT}/include/android/arm64-v8a" if="HXCPP_ARM64" unless="PYTHON_INCLUDE_PATH" />
+            <compilerflag value="-I${PYTHON_ANDROID_ROOT}/include/android/x86" if="HXCPP_M32" unless="HXCPP_ARMV7 || PYTHON_INCLUDE_PATH" />
+            <compilerflag value="-I${PYTHON_ANDROID_ROOT}/include/android/x86_64" if="HXCPP_M64" unless="HXCPP_ARM64 || PYTHON_INCLUDE_PATH" />
+        </section>
+
+        <file name="${LINC_CPYTHON_PATH}linc/linc_cpython.cpp" />
+    </files>
+
+    <files id="__lib__">
+        <compilerflag value="-I${LINC_CPYTHON_PATH}/linc/" />
+    </files>
+
+    <files id="__main__">
+        <compilerflag value="-I${LINC_CPYTHON_PATH}/linc/" />
+    </files>
+
+    <target id="haxe">
+        <section if="windows">
+            <lib name="${PYTHON_LIB_PATH}/python${PYTHON_VERSION}.lib" if="PYTHON_LIB_PATH" />
+            <lib name="${PYTHON_HOME}/libs/python${PYTHON_VERSION}.lib" unless="PYTHON_LIB_PATH" />
+        </section>
+
+        <section if="linux">
+            <lib name="-L${PYTHON_LIB_PATH}" if="PYTHON_LIB_PATH" />
+            <lib name="-l${PYTHON_LIB}" if="PYTHON_LIB" />
+            <lib name="-lpython${PYTHON_VERSION_DOT}" unless="PYTHON_LIB" />
+        </section>
+
+        <section if="mac">
+            <lib name="-L${PYTHON_LIB_PATH}" if="PYTHON_LIB_PATH" />
+            <lib name="-l${PYTHON_LIB}" if="PYTHON_LIB" />
+            <lib name="-lpython${PYTHON_VERSION_DOT}" unless="PYTHON_LIB" />
+        </section>
+
+        <section if="android">
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/armv7/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_ARMV7" />
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/arm64-v8a/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_ARM64" />
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/x86/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_M32" unless="HXCPP_ARMV7" />
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/x86_64/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_M64" unless="HXCPP_ARM64" />
+        </section>
+    </target>
+
+    <target id="__main__">
+        <section if="android">
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/armv7/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_ARMV7" />
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/arm64-v8a/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_ARM64" />
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/x86/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_M32" unless="HXCPP_ARMV7" />
+            <lib name="${PYTHON_ANDROID_ROOT}/lib/android/x86_64/lib/libpython${PYTHON_VERSION_DOT}.a" if="HXCPP_M64" unless="HXCPP_ARM64" />
+        </section>
+    </target>
+
+</xml>

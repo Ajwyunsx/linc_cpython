@@ -1,0 +1,14 @@
+{
+    "name": "linc_cpython",
+    "url": "https://github.com/Ajwyunsx/linc_cpython",
+    "license": "MIT",
+    "tags": ["python", "cpython", "linc", "bindings", "hxcpp"],
+    "description": "Haxe/hxcpp @:native bindings for the CPython C API.",
+    "version": "0.2.0",
+    "releasenote": "Add callback bridge, protocol helpers, packaging workflow, and Android prebuilt library layout.",
+    "contributors": ["Ajwyunsx", "OpenCode"],
+    "classPath": "",
+    "dependencies": {
+        "hxcpp": ""
+    }
+}

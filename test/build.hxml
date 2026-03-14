@@ -1,0 +1,4 @@
+-main Test
+-cpp cpp/
+-lib linc_cpython
+-debug

@@ -1,0 +1,15 @@
+.git/
+.github/
+.ruff_cache/
+test/cpp/
+test/modules/__pycache__/
+*.pdb
+*.ilk
+*.exp
+*.obj
+*.exe
+*.lib
+*.a
+*.so
+*.dylib
+.haxelib.zip

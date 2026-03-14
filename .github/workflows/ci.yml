@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.3.7
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install hxcpp
+        run: |
+          haxelib install hxcpp --quiet
+
+      - name: Register local library
+        run: |
+          haxelib dev linc_cpython .
+
+      - name: Build and run tests
+        shell: bash
+        run: |
+          cd test
+          haxe test.hxml
+          ./cpp/Test-debug.exe
+
+  package-haxelib:
+    runs-on: ubuntu-latest
+    needs: test-windows
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create haxelib archive
+        run: |
+          bash scripts/package-haxelib.sh
+
+      - name: Upload haxelib artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linc_cpython-haxelib
+          path: .haxelib.zip
