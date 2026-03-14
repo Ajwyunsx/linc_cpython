@@ -44,8 +44,10 @@
 
     <target id="haxe">
         <section if="windows">
-            <lib name="${PYTHON_LIB_PATH}/python${PYTHON_VERSION}.lib" if="PYTHON_LIB_PATH" />
-            <lib name="${PYTHON_HOME}/libs/python${PYTHON_VERSION}.lib" unless="PYTHON_LIB_PATH" />
+            <flag value="-libpath:${PYTHON_LIB_PATH}" if="PYTHON_LIB_PATH" />
+            <flag value="-libpath:${PYTHON_HOME}/libs" if="PYTHON_HOME" unless="PYTHON_LIB_PATH" />
+            <lib name="${PYTHON_LIB}.lib" if="PYTHON_LIB" />
+            <lib name="python${PYTHON_VERSION}.lib" unless="PYTHON_LIB" />
         </section>
 
         <section if="linux">

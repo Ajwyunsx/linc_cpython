@@ -999,8 +999,7 @@ namespace linc {
         }
 
         void* dynamicHandleToPyObject(::Dynamic value) {
-            hx::Native<void *> nativeValue = value.Cast< hx::Native<void *> >();
-            return nativeValue;
+            return value.mPtr ? value.mPtr->__GetHandle() : nullptr;
         }
 
         int compareEq(void* left, void* right) {
